@@ -42,13 +42,13 @@ exports.getNames = function(req, res, next) {
             next(err);
         } else if (results.length > 0) {
             results.forEach(function(result) {
-                taskNameList = taskNameList + '<option value="' + result.taskName + '">' + result.taskName + '</option>';
+                taskNameList = taskNameList + '<option value="' + result.assigneeId + '">' + result.taskName + '</option>';
             });
         }
 
     res.render('manageTask', {
             title: 'Manage Task',
-            
+         user:req.user,   
             taskNameList: taskNameList
         });
       
@@ -56,7 +56,7 @@ exports.getNames = function(req, res, next) {
 }
 
 // give gredit to assignee
-exports.getcredit = function(req, res, next) {
+/*exports.getcredit = function(req, res, next) {
    
     var tasks = require('../models/tasks.model');
  
@@ -70,26 +70,27 @@ exports.getcredit = function(req, res, next) {
             }
         });
     
-};
+};*/
 
 
 
 exports.completeTask = function(req, res, next) {
+    var db = require('../models/db.model')();
     var tasks = require('../models/tasks.model');
     var message = '';
-    
-        tasks.createTask(function(err, data) {
-            if (err) {
-                console.log(err.toString());
-                next(err);
-            } else {
-                message = '<h1>complete Task!</h1><br><table><tr><td>Task Name:</td><td>' + data.getName +
+
+    tasks.getCredit(function(err, data) {
+        if (err) {
+            console.log(err.toString());
+            res.redirect('/manageTask');
+        } else {
+        //    message = '<h1>complete Task!</h1><br><table><tr><td>Task Name:</td><td>' + data.getName +
                    
-                    '</td></tr></table>';
-
-              
-            }
-        });
+                  //  '</td></tr></table>';
+                    
+                    res.send(message);
+        }     
     
-};
 
+    });
+}

@@ -117,14 +117,14 @@ exports.getTasksByAssignee = function(assigneeId, callback) {
     });
 }
 
-exports.getCredit = function(callback){
+/*exports.getCredit = function (callback){
     
    
         
     db.query({
         sql: 'SELECT taskCredits FROM tasks;'
     }, function(err, results, fields){
-        // db.end();
+         db.end();
         if (err) {
             callback(err);
             return;
@@ -137,3 +137,76 @@ exports.getCredit = function(callback){
     });
 }
 
+exports.getStatus = function (callback){
+    
+   
+        
+    db.query({
+        sql: 'SELECT taskStatus FROM tasks;'
+    }, function(err, results, fields){
+        db.end();
+        if (err) {
+            callback(err);
+            return;
+        }
+        if (results.length == 0) {
+            callback({ code: 'Tasks not found' });
+            return;
+        }
+        callback(false, results);
+    });
+}
+*/
+
+exports.getValue = function (callback){
+    
+   
+        
+    db.query({
+        sql: 'SELECT taskStatus,taskCredits FROM tasks;'
+    }, function(err, results, fields){
+        db.end();
+        if (err) {
+            callback(err);
+            return;
+        }
+        if (results.length == 0) {
+            callback({ code: 'Tasks not found' });
+            return;
+        }
+        callback(false, results);
+    });
+}
+
+
+/*exports.getCredits = function(user, callback) {
+    db.query({
+        sql: 'update users set userCredits = ? where userId = ?',
+        values: [user.userCredits + 1, user.userId]
+    }, function(err, results, fields) {
+        // db.end();
+        if (err) {
+            callback(err);
+            return;
+        }
+        callback(false, results);
+    });
+}*/
+
+exports.getCredit = function(task, callback) {
+   
+
+    // get credit value of assignee
+    
+    db.query({
+        sql: 'update users set userCredits<> ? where userid = ?',
+         values: [user.userCredits + 1, task.assigneeId]
+}, function(err, results, fields) {
+        db.end();
+        if (err) {
+            callback(err);
+            return;
+        }
+        callback(false, results);
+    });
+}

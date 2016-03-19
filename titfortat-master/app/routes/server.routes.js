@@ -29,12 +29,6 @@ module.exports = function(app) {
       res.redirect('/');
     });
     
-    //jiho--------------
-    //app.get('/manageTask', manageTask.manageTask);
-    
-    //-------------------
-
-
     app.get('/signup', user.renderSignup)
         .post('/signup', user.createUser);
 
