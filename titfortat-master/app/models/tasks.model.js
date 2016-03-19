@@ -97,10 +97,33 @@ exports.getTasksByAssignee = function(assigneeId, callback) {
 
 //jiho-Test
 // 
-exports.getName = function(taskName, callback){
+//exports.getName = function(taskName, callback){
+    exports.getName = function(callback){
     db.query({
         sql: 'SELECT taskName FROM tasks;'
+        //sql: 'SELECT * FROM tasks join users as u on u.userid = tasks.assigneeid WHERE taskName =?;',
+        //values: [taskName]
     }, function(err, results, fields) {
+        // db.end();
+        if (err) {
+            callback(err);
+            return;
+        }
+        if (results.length == 0) {
+            callback({ code: 'Tasks not found' });
+            return;
+        }
+        callback(false, results);
+    });
+}
+
+exports.getCredit = function(callback){
+    
+   
+        
+    db.query({
+        sql: 'SELECT taskCredits FROM tasks;'
+    }, function(err, results, fields){
         // db.end();
         if (err) {
             callback(err);

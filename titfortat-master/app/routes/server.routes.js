@@ -48,10 +48,10 @@ module.exports = function(app) {
         
         //Jiho
     app.get('/manageTask', manageTask.getNames);
-    app.route('/completeTast')
+    app.route('/manageTask')
         .get(manageTask.getNames)
         .post(manageTask.completeTask);
-    /*app.route('/tasks/:user')
+   /* app.route('/tasks/:user')
         .get(manageTask.getNames)*/
         
       

@@ -55,30 +55,41 @@ exports.getNames = function(req, res, next) {
     });
 }
 
+// give gredit to assignee
+exports.getcredit = function(req, res, next) {
+   
+    var tasks = require('../models/tasks.model');
+ 
+    tasks.getCredit(function(err, results) {
+        if (err) {
+            console.log(err.toString());
+            next(err);
+        } else {
+                
+                    tasks.getCredit = tasks.getCredit+1;
+            }
+        });
+    
+};
+
+
+
 exports.completeTask = function(req, res, next) {
     var tasks = require('../models/tasks.model');
     var message = '';
-    if (req.user.userCredits >= 1) {
-        tasks.createTask(req.body, function(err, data) {
+    
+        tasks.createTask(function(err, data) {
             if (err) {
                 console.log(err.toString());
-                res.redirect('/getName');
+                next(err);
             } else {
-                message = '<h1>completeTask!</h1><br><table><tr><td>Task Name:</td><td>' + req.body.getName +
+                message = '<h1>complete Task!</h1><br><table><tr><td>Task Name:</td><td>' + data.getName +
                    
                     '</td></tr></table>';
 
-                tasks.useCredits(req.user, function(err, data) {
-                    if (err) {
-                        console.log(err.toString());
-                    } else {
-                        res.send(message);
-                    }
-                });
+              
             }
         });
-    } else {
-        message = '<h1>Need at least one credit!</h1>';
-        res.send(message);
-    }
+    
 };
+
