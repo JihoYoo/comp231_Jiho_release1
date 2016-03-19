@@ -36,20 +36,23 @@ exports.getNames = function(req, res, next) {
         sql: 'select * from tasks where taskName <> ?;',
         values: req.user.taskName
     },*/
-    tasks.getName(function(err, results) {
+    tasks.getTasksByAssigner(req.user.userId, function(err, results) {
         if (err) {
             console.log(err.toString());
             next(err);
         } else if (results.length > 0) {
-            results.forEach(function(result) {
-                taskNameList = taskNameList + '<option value="' + result.assigneeId + '">' + result.taskName + '</option>';
-            });
+            // results.forEach(function(result) {
+            //     // taskNameList = taskNameList + '<option value="' + result.assigneeId + '">' + result.taskName + '</option>';
+            // });
+            console.log("Tasks returned.");
+            // console.log(results.taskId);
+            
         }
 
     res.render('manageTask', {
             title: 'Manage Task',
-         user:req.user,   
-            taskNameList: taskNameList
+            user:req.user,   //pass the user  object
+            tasks: results
         });
       
     });
@@ -79,16 +82,17 @@ exports.completeTask = function(req, res, next) {
     var tasks = require('../models/tasks.model');
     var message = '';
 
-    tasks.getCredit(function(err, data) {
+    tasks.awardCredits(req.body.task, req.user, function(err, data) {
         if (err) {
             console.log(err.toString());
             res.redirect('/manageTask');
         } else {
+            res.redirect('/manageTask');
         //    message = '<h1>complete Task!</h1><br><table><tr><td>Task Name:</td><td>' + data.getName +
                    
                   //  '</td></tr></table>';
                     
-                    res.send(message);
+                    // res.send(message);
         }     
     
 

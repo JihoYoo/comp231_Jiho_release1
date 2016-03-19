@@ -16,8 +16,13 @@
            <tr>
                 <td>Select Task:</td>
                 <td>
-                    <select name="taskName">
-                        <%- taskNameList %>
+                    <select name="task">
+                        
+                        <% for(var i=0; i < tasks.length; i++) { %>
+                            <option value="<%= tasks[i].taskId %>"><%= tasks[i].taskName %></option>
+                        
+                        
+                        <% } %>
                     </select>
                 </td>
             </tr>

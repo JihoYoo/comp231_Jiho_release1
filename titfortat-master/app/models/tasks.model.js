@@ -9,15 +9,19 @@ exports.list = function(callback) {
     db.query({
         sql: 'select tasks.taskName, tasks.taskDescription, tasks.taskmasterId, u1.userName as assigner, tasks.assigneeId, u2.userName as assignee, tasks.taskStatus from tasks join users u1 on u1.userId = tasks.taskmasterId join users u2 on u2.userId = tasks.assigneeId;',
     }, function(err, results, fields) {
-        // db.end();
+        db.end();
+        console.log("Connection closed");
         if (err) {
             callback(err);
+            console.log("error: "+ err.toString());
             return;
         }
         if (results.length == 0) {
             callback({ code: 'Tasks not found' });
+            
             return;
         }
+        console.log("Results returned");
         callback(false, results);
     });
 }
@@ -193,13 +197,13 @@ exports.getValue = function (callback){
     });
 }*/
 
-exports.getCredit = function(task, callback) {
+exports.awardCredits = function(task, user, callback) {
    
 
     // get credit value of assignee
     
     db.query({
-        sql: 'update users set userCredits<> ? where userid = ?',
+        sql: 'update users set userCredits = ? where userid = ?',
          values: [user.userCredits + 1, task.assigneeId]
 }, function(err, results, fields) {
         db.end();
